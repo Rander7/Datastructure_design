@@ -503,7 +503,7 @@ void Window::messageLoop()
 			else if (editMap_add_vex->state(msg))
 			{
 				MessageBox(GetHWnd(), "请输入景点名和信息后点击景点位置", "操作提示", MB_OK);
-				char s1[50] = {0};
+				char s1[50];
 				char s2[50];
 				InputBox(s1, 50, "请输入新景点名");
 				InputBox(s2, 50, "请输入景点介绍");
@@ -533,11 +533,12 @@ void Window::messageLoop()
 					if (editJudgeButton(start, finish))
 					{
 						char s[10];
-						int weight = 0;
+						int weight = MAXDISTANCE;
+						//这里一定要MAXDISTENCE,因为前面用add判断已经修改了weight
 						if (G.add_road(start, finish, weight))
 						{
 							InputBox(s, 10, "请输入道路长度");
-							weight = atoi(s);										//char*转int
+							int weight = atoi(s);										//char*转int
 							G.add_road(start, finish, weight);
 							MessageBox(GetHWnd(), "该道路已增加", "操作完成", MB_OK);
 							showEditMap();
@@ -548,7 +549,7 @@ void Window::messageLoop()
 							if (IDYES == id)
 							{
 								InputBox(s, 10, "请输入道路长度");
-								int weight = atoi(s);								//char*转int
+								int weight = atoi(s);									//char*转int
 								G.update_road(start, finish, weight);
 								MessageBox(GetHWnd(), "该道路已更新", "操作完成", MB_OK);
 								showEditMap();
@@ -589,10 +590,11 @@ void Window::messageLoop()
 				{
 					char s[10];
 					int weight = 0;
+					//这里weight不能是MAXDISTENCE，因为是更新权值是MAXDISTENCE后面就不更新了
 					if (G.update_road(start, finish, weight))
 					{
 						InputBox(s, 10, "请输入道路长度");
-						int weight = atoi(s);									//char*转int
+						int weight = atoi(s);										//char*转int
 						G.update_road(start, finish, weight);
 						MessageBox(GetHWnd(), "该道路已更新", "操作完成", MB_OK);
 						showEditMap();
@@ -603,7 +605,7 @@ void Window::messageLoop()
 						if (IDYES == id)
 						{
 							InputBox(s, 10, "请输入道路长度");
-							weight = atoi(s);									//char*转int
+							int weight = atoi(s);									//char*转int
 							G.add_road(start, finish, weight);
 							MessageBox(GetHWnd(), "该道路已增加", "操作完成", MB_OK);
 							showEditMap();
@@ -621,13 +623,13 @@ void Window::messageLoop()
 				int start, finish;
 				if (editJudgeButton(start, finish))
 				{
-
 					char s[10];
-					int weight = 0;
+					int weight = MAXDISTANCE;										
+					//这里一定要MAXDISTENCE,因为前面用add判断已经修改了weight
 					if (G.add_road(start, finish, weight))
 					{
 						InputBox(s, 10, "请输入道路长度");
-						weight = atoi(s);										//char*转int
+						int weight = atoi(s);										//char*转int
 						G.add_road(start, finish, weight);
 						MessageBox(GetHWnd(), "该道路已增加", "操作完成", MB_OK);
 						showEditMap();
@@ -638,7 +640,7 @@ void Window::messageLoop()
 						if (IDYES == id)
 						{
 							InputBox(s, 10, "请输入道路长度");
-							int weight = atoi(s);								//char*转int
+							int weight = atoi(s);									//char*转int
 							G.update_road(start, finish, weight);
 							MessageBox(GetHWnd(), "该道路已更新", "操作完成", MB_OK);
 							showEditMap();

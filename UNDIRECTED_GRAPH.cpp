@@ -155,10 +155,13 @@ int UNDIRECTED_GRAPH::add_road(int x, int y, int weight)
 	{
 		return 0;
 	}
-	roads[x][y] = weight;
-	roads[y][x] = weight;
-	change_road_number(true);
-	return 1;	
+	else
+	{
+		roads[x][y] = weight;
+		roads[y][x] = weight;
+		change_road_number(true);
+		return 1;	
+	}
 }
 
 int UNDIRECTED_GRAPH::del_road(int x, int y)
