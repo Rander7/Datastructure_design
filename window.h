@@ -19,6 +19,7 @@ public:
 
 	void showMessage();										// 地图界面提示信息展示
 	void searchMessage();									// 搜索界面提示信息展示
+	void search_pathMessage();								//搜索界面搜索最短路径信息展示
 	void editMessage();										// 编辑界面提示信息展示
 
 	void showMap();											// 显示地图窗口   
@@ -34,6 +35,8 @@ public:
 
 	void update_Button(Button* button, char s[10]);
 	void add_Button(UNDIRECTED_GRAPH& G, int x, int y, int width, int height, char s[10]);
+
+	void show_all_path();
 
 public:
 	// 窗口状态标识，每个状态代表了一个界面
@@ -52,6 +55,8 @@ private:
 	// 搜索窗口按钮
 	Button* search_back;
 	Button* search_message;
+	Button* search_search_path;
+	Button* search_show_all_path;
 	// 修改窗口按钮
 	Button* editMap_add_vex;
 	Button* editMap_delete_vex;
@@ -61,6 +66,7 @@ private:
 	Button* editMap_update_road;
 	Button* editMap_message;
 	Button* editMap_back;
+	Button* editMap_show_all_path;
 	// 景点按钮
 	Button* button[20];
 	// 窗口状态

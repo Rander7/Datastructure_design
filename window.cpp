@@ -30,15 +30,18 @@ Window::Window(const int& width, const int& height) : Widget(0, 0, width, height
 
 	// 创建搜索窗口按钮
 	search_message = new Button(850, 600, 120, 40, "使用提示");
-	search_back = new Button(850, 650, 120, 40, "返回");
+	search_search_path = new Button(850, 650, 120, 40, "查询路径");
+	search_show_all_path = new Button(850, 700, 120, 40, "显示路径");
+	search_back = new Button(850, 750, 120, 40, "返回");
 
 	// 创建修改窗口按钮
-	editMap_update_vex = new Button(850, 400, 120, 40, "更新景点");
-	editMap_add_vex = new Button(850, 450, 120, 40, "添加景点");
-	editMap_delete_vex = new Button(850, 500, 120, 40, "删除景点");
-	editMap_update_road = new Button(850, 550, 120, 40, "更新道路");
-	editMap_add_road = new Button(850, 600, 120, 40, "添加道路");
-	editMap_delete_road = new Button(850, 650, 120, 40, "删除道路");
+	editMap_update_vex = new Button(850, 350, 120, 40, "更新景点");
+	editMap_add_vex = new Button(850, 400, 120, 40, "添加景点");
+	editMap_delete_vex = new Button(850, 450, 120, 40, "删除景点");
+	editMap_update_road = new Button(850, 500, 120, 40, "更新道路");
+	editMap_add_road = new Button(850, 550, 120, 40, "添加道路");
+	editMap_delete_road = new Button(850, 600, 120, 40, "删除道路");
+	editMap_show_all_path = new Button(850, 650, 120, 40, "显示路径");
 	editMap_message = new Button(850, 700, 120, 40, "使用提示");
 	editMap_back = new Button(850, 750, 120, 40, "返回");
 
@@ -109,6 +112,11 @@ int Window::viewJudgeButton_edit()
 				editMap_message->show();
 				return -1;
 			}
+			else if (editMap_show_all_path->state(msg))
+			{
+				editMap_show_all_path->show();
+				return -1;
+			}
 			else if (editMap_back->state(msg))
 			{
 				showMainWindow();
@@ -132,11 +140,21 @@ int Window::searchJudgeButton(int& s, int& f)
 				{
 					s = i;
 					flag++;
-					button[i]->whe_click = true;
+					button[s]->whe_click = true;
 				}
 				else if (search_message->state(msg))
 				{
 					searchMessage();
+					return 0;
+				}
+				else if (search_search_path->state(msg))
+				{
+					search_pathMessage();
+					return 0;
+				}
+				else if (search_show_all_path->state(msg))
+				{
+					search_show_all_path->show();
 					return 0;
 				}
 				else if (search_back->state(msg))
@@ -158,11 +176,28 @@ int Window::searchJudgeButton(int& s, int& f)
 				}
 				else if (search_message->state(msg))
 				{
-					searchMessage();
+					button[s]->whe_click = false;
+					showSearch();
+					MessageBox(GetHWnd(), "操作错误！请连续点击两个景点进行查询", "操作提示", MB_OK);
+					return 0;
+				}
+				else if (search_search_path->state(msg))
+				{
+					button[s]->whe_click = false;
+					showSearch();
+					MessageBox(GetHWnd(), "操作错误！请连续点击两个景点进行查询", "操作提示", MB_OK);
+					return 0;
+				}
+				else if (search_show_all_path->state(msg))
+				{
+					button[s]->whe_click = false;
+					showSearch();
+					MessageBox(GetHWnd(), "操作错误！请连续点击两个景点进行查询", "操作提示", MB_OK);
 					return 0;
 				}
 				else if (search_back->state(msg))
 				{
+					button[s]->whe_click = false;
 					showMainWindow();
 					return 0;
 				}
@@ -193,6 +228,11 @@ int Window::editJudgeButton(int& s, int& f)
 					editMessage();
 					return 0;
 				}
+				else if (editMap_show_all_path->state(msg))
+				{
+					editMap_show_all_path->show();
+					return 0;
+				}
 				else if (editMap_back->state(msg))
 				{
 					showMainWindow();
@@ -212,11 +252,21 @@ int Window::editJudgeButton(int& s, int& f)
 				}
 				else if (editMap_message->state(msg))
 				{
-					editMessage();
+					button[s]->whe_click = false;
+					showEditMap();
+					MessageBox(GetHWnd(), "操作错误!", "操作提示", MB_OK);
+					return 0;
+				}
+				else if (editMap_show_all_path->state(msg))
+				{
+					button[s]->whe_click = false;
+					showEditMap();
+					MessageBox(GetHWnd(), "操作错误!", "操作提示", MB_OK);
 					return 0;
 				}
 				else if (editMap_back->state(msg))
 				{
+					button[s]->whe_click = false;
 					showMainWindow();
 					return 0;
 				}
@@ -341,10 +391,25 @@ void Window::messageLoop()
 			{
 				searchMessage();
 			}
-			else
+			else if (search_show_all_path->state(msg))
+			{
+				MessageBox(GetHWnd(), "现在展示所有路径：", "操作提示", MB_OK);
+				show_all_path();
+				ExMessage msg;
+				while (1)
+				{
+					msg = getmessage();
+					if (msg.message == WM_LBUTTONDOWN)
+					{
+						showSearch();
+						break;
+					}
+				}
+			}
+			else if (search_search_path->state(msg))
 			{
 				int start, finish;
-				if (searchJudgeButton(start, finish))
+				if(searchJudgeButton(start, finish))
 				{
 					G.search_all_the_short_path(path_array, short_path_array, start, finish);
 					int cnt=0;													//计算每一个最短路径景点数
@@ -370,15 +435,13 @@ void Window::messageLoop()
 							msg = getmessage();
 							if (msg.message == WM_LBUTTONDOWN)
 							{
-								//cleardevice();
-								//loadimage(NULL, MAP_IMAGE, 1000, 800);
 								showSearch();
 								break;
 							}
 						}
 					}
 				}
-			}
+			}		
 		}
 		else if (state == WindowState::editMap)
 		{
@@ -389,6 +452,21 @@ void Window::messageLoop()
 			else if (editMap_message->state(msg))
 			{
 				editMessage();
+			}
+			else if (editMap_show_all_path->state(msg))
+			{
+				MessageBox(GetHWnd(), "现在展示所有路径：", "操作提示", MB_OK);
+				show_all_path();
+				ExMessage msg;
+				while (1)
+				{
+					msg = getmessage();
+					if (msg.message == WM_LBUTTONDOWN)
+					{
+						showEditMap();
+						break;
+					}
+				}
 			}
 			else if (editMap_update_vex->state(msg))
 			{
@@ -574,8 +652,8 @@ void Window::messageLoop()
 			}
 			else if (editMap_delete_road->state(msg))
 			{
-			MessageBox(GetHWnd(), "请在图中选择两个景点以删除之间的道路", "操作提示", MB_OK);
-			int start, finish;
+				MessageBox(GetHWnd(), "请在图中选择两个景点以删除之间的道路", "操作提示", MB_OK);
+				int start, finish;
 				if (editJudgeButton(start, finish))
 				{
 					if (G.del_road(start, finish))
@@ -657,6 +735,8 @@ void Window::showSearch()
 	// 显示控件
 	search_message->show();
 	search_back->show();
+	search_search_path->show();
+	search_show_all_path->show();
 	for (int i = 0; i < G.m_vertex_number; i++)
 	{
 		button[i]->show();
@@ -684,6 +764,7 @@ void Window::showEditMap()
 	editMap_update_road->show();
 	editMap_add_road->show();
 	editMap_delete_road->show();
+	editMap_show_all_path->show();
 	editMap_message->show();
 	editMap_back->show();
 	for (int i = 0; i <  G.m_vertex_number; i++)
@@ -708,7 +789,33 @@ void Window::searchMessage()
 	MessageBox(GetHWnd(), "先后点击两个景点名称即可绘制景点间的最短路径，按任意键继续", "使用提示", MB_OK);
 }
 
+void Window::search_pathMessage()
+{
+	MessageBox(GetHWnd(), "现在开始点击两个景点：", "使用提示", MB_OK);
+}
+
 void Window::editMessage()
 {
 	MessageBox(GetHWnd(), "选择你想实现的功能", "使用提示", MB_OK);
+}
+
+void Window::show_all_path()
+{
+	for (int i = 0; i < G.m_vertex_number; i++)
+	{
+		for (int j = i + 1; j < G.m_vertex_number; j++)
+		{
+			if (G.roads[i][j] != MAXDISTANCE)
+			{
+				int x1 = button[i]->getX() + 50;
+				int x2 = button[j]->getX() + 50;
+				int y1 = button[i]->getY() + 20;
+				int y2 = button[j]->getY() + 20;
+				POINT pts[] = { {x1,y1},{x2,y2} };
+				setlinecolor(LIGHTCYAN);
+				polyline(pts, 2);
+			}
+		}
+	}
+	setlinecolor(BLACK);
 }

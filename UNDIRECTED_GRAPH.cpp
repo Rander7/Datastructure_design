@@ -18,7 +18,7 @@ char store_short_path[200] = { 0 };							// ËùÓĞ²Ù×÷½áÊøºó´òÓ¡ËùÓĞ×î¶ÌÂ·¾¶ÎÄ×ÖĞ
 void UNDIRECTED_GRAPH::init_UNDIRECTED_GRAPH()
 {
 	m_vertex_number = 14;									// ³õÊ¼»¯¾°µã¸öÊı
-	m_road_number = 24;										// ³õÊ¼»¯ËùÓĞÂ·¾¶¸öÊı
+	m_road_number = 27;										// ³õÊ¼»¯ËùÓĞÂ·¾¶¸öÊı
 
 	VERTEXTYPE vertex0(0, "¼ÒÊôÂ¥", "Ñ§Ğ£¹¤×÷ÈËÔ±¼ÒÊô×¡Ëù", true);
 	vertexs[0] = vertex0;
@@ -63,10 +63,13 @@ void UNDIRECTED_GRAPH::init_UNDIRECTED_GRAPH()
 	roads[0][7] = 130;
 	roads[1][3] = 370;
 	roads[1][4] = 250;
+	roads[1][7] = 200;
 	roads[2][3] = 50;
 	roads[2][6] = 150;
 	roads[4][5] = 80;
 	roads[4][8] = 70;
+	roads[4][9] = 120;
+	roads[4][10] = 150;
 	roads[4][13] = 200;
 	roads[5][6] = 50;
 	roads[5][10] = 140;
