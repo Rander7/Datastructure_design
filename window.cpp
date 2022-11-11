@@ -202,6 +202,7 @@ int Window::editJudgeButton(int& s, int& f)
 		{
 			for (int i = 0; i < G.m_vertex_number; i++)
 			{
+				button[s]->show_click();
 				if (button[i]->state(msg) && msg.message != WM_LBUTTONUP)
 				{
 					f = i;
@@ -313,7 +314,7 @@ void Window::messageLoop()
 		{
 			if (viewMap_message->state(msg))
 			{
-				showMessage();//展示提示信息
+				showMessage();													//展示提示信息
 			}
 			else if (viewMap_back->state(msg))									// 返回主窗口
 			{
@@ -368,8 +369,9 @@ void Window::messageLoop()
 							msg = getmessage();
 							if (msg.message == WM_LBUTTONDOWN)
 							{
-								cleardevice();
-								loadimage(NULL, MAP_IMAGE, 1000, 800);
+								//cleardevice();
+								//loadimage(NULL, MAP_IMAGE, 1000, 800);
+								showSearch();
 								break;
 							}
 						}
@@ -443,7 +445,43 @@ void Window::messageLoop()
 						MessageBox(GetHWnd(), "该景点已增加", "操作完成", MB_OK);
 						break;
 					}
-				}		
+				}
+				int id = MessageBox(GetHWnd(), "是否要给新加的景点添加路径？", "操作提示", MB_YESNO);
+				if (IDYES == id)
+				{
+					MessageBox(GetHWnd(), "请在图中选择两个景点以添加之间的道路", "操作提示", MB_OK);
+					int start, finish;
+					if (editJudgeButton(start, finish))
+					{
+						char s[10];
+						int weight = 0;
+						if (G.add_road(start, finish, weight))
+						{
+							InputBox(s, 10, "请输入道路长度");
+							weight = atoi(s);										//char*转int
+							G.add_road(start, finish, weight);
+							MessageBox(GetHWnd(), "该道路已增加", "操作完成", MB_OK);
+							showEditMap();
+						}
+						else
+						{
+							int id = MessageBox(GetHWnd(), "该道路已经存在，是否要更新该道路的权值?", "操作提示", MB_YESNO);
+							if (IDYES == id)
+							{
+								InputBox(s, 10, "请输入道路长度");
+								int weight = atoi(s);								//char*转int
+								G.update_road(start, finish, weight);
+								MessageBox(GetHWnd(), "该道路已更新", "操作完成", MB_OK);
+								showEditMap();
+								break;
+							}
+							else if (IDNO == id)
+							{
+								showEditMap();
+							}
+						}
+					}
+				}
 			}
 			else if (editMap_delete_vex->state(msg))
 			{
@@ -478,6 +516,7 @@ void Window::messageLoop()
 						int weight = atoi(s);									//char*转int
 						G.update_road(start, finish, weight);
 						MessageBox(GetHWnd(), "该道路已更新", "操作完成", MB_OK);
+						showEditMap();
 					}
 					else
 					{
@@ -488,6 +527,7 @@ void Window::messageLoop()
 							weight = atoi(s);									//char*转int
 							G.add_road(start, finish, weight);
 							MessageBox(GetHWnd(), "该道路已增加", "操作完成", MB_OK);
+							showEditMap();
 						}
 						else if(IDNO==id)
 						{
@@ -511,6 +551,7 @@ void Window::messageLoop()
 						weight = atoi(s);										//char*转int
 						G.add_road(start, finish, weight);
 						MessageBox(GetHWnd(), "该道路已增加", "操作完成", MB_OK);
+						showEditMap();
 					}
 					else
 					{
@@ -521,6 +562,7 @@ void Window::messageLoop()
 							int weight = atoi(s);								//char*转int
 							G.update_road(start, finish, weight);
 							MessageBox(GetHWnd(), "该道路已更新", "操作完成", MB_OK);
+							showEditMap();
 						}
 						else if(IDNO==id)
 						{
