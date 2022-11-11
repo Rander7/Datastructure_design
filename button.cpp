@@ -1,8 +1,6 @@
 #include "button.h"
 
-
-
-Button::Button(const int& x, const int& y, const int& width, const int& height, const std::string& text) : Widget(x, y, width, height), text(text)
+Button::Button(const int& x, const int& y, const int& width, const int& height, const std::string& text,bool whe_click) : Widget(x, y, width, height), text(text),whe_click(whe_click)
 {
 }
 
@@ -74,7 +72,14 @@ bool Button::state(const ExMessage& msg) const
 	}
 	else														// 恢复按钮原来的状态
 	{
-		show();
+		if (this->whe_click)
+		{
+			show_click();
+		}
+		else
+		{
+			show();
+		}
 		return false;
 	}
 }

@@ -132,6 +132,7 @@ int Window::searchJudgeButton(int& s, int& f)
 				{
 					s = i;
 					flag++;
+					button[i]->whe_click = true;
 				}
 				else if (search_message->state(msg))
 				{
@@ -149,10 +150,10 @@ int Window::searchJudgeButton(int& s, int& f)
 		{
 			for (int i = 0; i < G.m_vertex_number; i++)
 			{
-				button[s]->show_click();
 				if (button[i]->state(msg) && msg.message != WM_LBUTTONUP)
 				{
 					f = i;
+					button[s]->whe_click = false;
 					return 1;
 				}
 				else if (search_message->state(msg))
@@ -185,6 +186,7 @@ int Window::editJudgeButton(int& s, int& f)
 				{
 					s = i;
 					flag++;
+					button[i]->whe_click = true;
 				}
 				else if (editMap_message->state(msg))
 				{
@@ -202,10 +204,10 @@ int Window::editJudgeButton(int& s, int& f)
 		{
 			for (int i = 0; i < G.m_vertex_number; i++)
 			{
-				button[s]->show_click();
 				if (button[i]->state(msg) && msg.message != WM_LBUTTONUP)
 				{
 					f = i;
+					button[s]->whe_click = false;
 					return 1;
 				}
 				else if (editMap_message->state(msg))
@@ -328,7 +330,6 @@ void Window::messageLoop()
 					MessageBox(GetHWnd(), G.vertexs[n].get_vex_information(), "景点信息", MB_OK);
 				}
 			}
-
 		}
 		else if (state == WindowState::Search)
 		{
@@ -577,10 +578,16 @@ void Window::messageLoop()
 			int start, finish;
 				if (editJudgeButton(start, finish))
 				{
-					if (G.del_road(start,finish))
+					if (G.del_road(start, finish))
+					{
 						MessageBox(GetHWnd(), "该道路已删除", "操作完成", MB_OK);
+						showEditMap();
+					}
 					else
+					{
 						MessageBox(GetHWnd(), "无此道路！", "操作完成", MB_OK);
+						showEditMap();
+					}
 				}
 			}
 		}
