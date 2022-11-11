@@ -22,7 +22,7 @@ public:
 
     void add_vertex(char name2[], char info2[]);                    //增加景点
     void del_vertex(int x);                                         //删除景点
-    void update_vertex(int x, char name1[], char info1[]);          //更新景点
+    void update_vertex(int x, char name1[], char info1[],int flag);          //更新景点
 
     int add_road(int x, int y, int weight);                         //增加道路
     int del_road(int x, int y);                                     //删除道路
@@ -30,7 +30,6 @@ public:
 
     void search_short_path(int P[MAXSPOTS][MAXSPOTS], int D[MAXSPOTS][MAXSPOTS], int x, int y);
     void search_all_the_short_path(int P[MAXSPOTS][MAXSPOTS], int D[MAXSPOTS][MAXSPOTS], int x, int y);
-    /*void dfs(int pos, int end, int min, int pass_by_temp_num);*/
     void dfs(int pos, int end, int min);
 
 };

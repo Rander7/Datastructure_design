@@ -129,10 +129,21 @@ void UNDIRECTED_GRAPH::del_vertex(int x)
 	vertexs[x].change_vex_existence(false);					//该景点存在赋否
 }
 
-void UNDIRECTED_GRAPH::update_vertex(int x, char name1[], char info1[])
+void UNDIRECTED_GRAPH::update_vertex(int x, char name1[], char info1[],int flag)
 {
-	vertexs[x].change_vex_name(name1);
-	vertexs[x].change_vex_information(info1);
+	if (flag == 3)
+	{
+		vertexs[x].change_vex_name(name1);
+		vertexs[x].change_vex_information(info1);
+	}
+	else if (flag == 1)
+	{
+		vertexs[x].change_vex_name(name1);
+	}
+	else if (flag == 2)
+	{
+		vertexs[x].change_vex_information(info1);
+	}
 }
 
 int UNDIRECTED_GRAPH::add_road(int x, int y, int weight)
@@ -197,80 +208,6 @@ void UNDIRECTED_GRAPH::change_road_number(bool t)
 }
 
 
-//void UNDIRECTED_GRAPH::search_short_path(int P[MAXSPOTS][MAXSPOTS], int D[MAXSPOTS][MAXSPOTS], int x, int y)
-//{
-//	int j = 0;
-//	memset(pass_by, -1, 80);
-//	pass_by[j++] = x;
-//	char zhan_cun[200] = { 0 };
-//	strcat(zhan_cun,vertexs[x].get_vex_name());
-//	strcat(zhan_cun, "->");
-//	strcat(zhan_cun, vertexs[y].get_vex_name());
-//	strcat(zhan_cun, "的最短路径为: \n");
-//
-//	int v, w, k;		//v,w分别是起点和终点,k为中间节点
-//	//初始化floyd算法的两个矩阵 
-//	for (v = 0; v < m_vertex_number; v++) {
-//		for (w = 0; w < m_vertex_number; w++) {
-//			D[v][w] = roads[v][w];
-//			P[v][w] = w;
-//		}
-//	}
-//	//k为中间点 
-//	for (k = 0; k < m_vertex_number; k++) {
-//		//v为起点 
-//		for (v = 0; v < m_vertex_number; v++) {
-//			//w为终点 
-//			for (w = 0; w < m_vertex_number; w++) {
-//				if (D[v][w] > (D[v][k] + D[k][w])) {
-//					D[v][w] = D[v][k] + D[k][w];//更新最短路径 
-//					P[v][w] = P[v][k];//更新最短路径中间顶点 
-//				}
-//			}
-//		}
-//	}
-//	char zhan_path[100];
-//	if (D[x][y] != MAXDISTANCE)
-//	{
-//		sprintf(zhan_path, "%d", D[x][y]);
-//	}
-//
-//	if (x == y)
-//	{
-//		D[x][y] = 0;
-//		sprintf(zhan_path, "%d", D[x][y]);
-//		strcat(zhan_cun, zhan_path);
-//		MessageBox(GetHWnd(), zhan_cun, "最短路径", MB_OK);
-//	}
-//	else
-//	{
-//		if (D[x][y] == MAXDISTANCE)
-//		{
-//			MessageBox(GetHWnd(), "不存在路径连接两个景点，某个或者两个都景点已经被删除了", "最短路径", MB_OK);
-//
-//		}
-//		else
-//		{
-//			k = P[x][y];
-//			strcat(zhan_cun, vertexs[x].get_vex_name());
-//
-//			while (k != y) {
-//				pass_by[j++] = k;
-//				strcat(zhan_cun, "->");
-//				strcat(zhan_cun, vertexs[k].get_vex_name());
-//				k = P[k][y];
-//			}
-//			pass_by[j++] = y;
-//			strcat(zhan_cun, "->");
-//			strcat(zhan_cun, vertexs[y].get_vex_name());
-//			strcat(zhan_cun, " \n最短路径长度为: ");
-//			strcat(zhan_cun, zhan_path);
-//			MessageBox(GetHWnd(), zhan_cun, "最短路径", MB_OK);
-//
-//		}
-//	}
-//}
-
 void UNDIRECTED_GRAPH::dfs(int pos, int end, int min)
 {
 	int i;
@@ -284,7 +221,7 @@ void UNDIRECTED_GRAPH::dfs(int pos, int end, int min)
 		sum += roads[stack[i]][end];					// 注意终点没有入栈,加上最后一个景点到end路径长度
 		if (sum == min)									// 如果该条路径长度等于最短路径长度
 		{
-			for (i = 0; i < stack_top; i++)				// 将该路径栈中的所有景点下标存到pass_by_this_road和cub_all_the_pass_by中
+			for (i = 0; i < stack_top; i++)				// 将该路径栈中的所有景点下标存到pass_by
 			{
 				pass_by[pass_by_num++]= stack[i];
 				strcat(store_short_path, vertexs[stack[i]].get_vex_name());

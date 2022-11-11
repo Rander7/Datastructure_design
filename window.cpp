@@ -361,9 +361,17 @@ void Window::messageLoop()
 					}
 					if (cnt != 0)												// 展示线路并暂停、刷新
 					{
-						system("pause");
-						cleardevice();
-						loadimage(NULL, MAP_IMAGE, 1000, 800);
+						ExMessage msg;
+						while (1)
+						{
+							msg = getmessage();
+							if (msg.message == WM_LBUTTONDOWN)
+							{
+								cleardevice();
+								loadimage(NULL, MAP_IMAGE, 1000, 800);
+								break;
+							}
+						}
 					}
 				}
 			}
@@ -434,8 +442,7 @@ void Window::messageLoop()
 						MessageBox(GetHWnd(), "该景点已增加", "操作完成", MB_OK);
 						break;
 					}
-				}
-						
+				}		
 			}
 			else if (editMap_delete_vex->state(msg))
 			{

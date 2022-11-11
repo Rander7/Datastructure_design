@@ -40,4 +40,3 @@ public:
     void update_vertex();                                   //¸üÐÂ¾°µã
 };
 
-
