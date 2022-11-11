@@ -528,9 +528,11 @@ void Window::messageLoop()
 				int id = MessageBox(GetHWnd(), "是否要给新加的景点添加路径？", "操作提示", MB_YESNO);
 				if (IDYES == id)
 				{
-					MessageBox(GetHWnd(), "请在图中选择两个景点以添加之间的道路", "操作提示", MB_OK);
+					MessageBox(GetHWnd(), "请在图中选择新添路径上的和新景点相连的景点", "操作提示", MB_OK);
 					int start, finish;
-					if (editJudgeButton(start, finish))
+					start = G.m_vertex_number;
+					finish = viewJudgeButton_edit();
+					if (finish >= 0)
 					{
 						char s[10];
 						int weight = MAXDISTANCE;

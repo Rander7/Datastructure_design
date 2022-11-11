@@ -50,9 +50,9 @@ void UNDIRECTED_GRAPH::init_UNDIRECTED_GRAPH()
 	vertexs[13] = vertex13;
 	
 	
-	for (int i = 0; i < m_vertex_number; i++)
+	for (int i = 0; i < MAXSPOTS; i++)
 	{
-		for (int j = 0; j < m_vertex_number; j++)
+		for (int j = 0; j < MAXSPOTS; j++)
 		{
 			roads[i][j] = MAXDISTANCE;
 		}
