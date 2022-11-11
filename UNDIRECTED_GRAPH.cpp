@@ -216,6 +216,10 @@ void UNDIRECTED_GRAPH::dfs(int pos, int end, int min)
 		int sum = 0;									// 记录该路径的总长
 		for (i = 0; i < stack_top - 1; i++)			    // 注意最后stack_top比栈中景点总数多1
 		{												// 注意最后i的循环最大下标
+			if (sum > min)								//加的途中sum>min直接取消
+			{
+				break;
+			}
 			sum += roads[stack[i]][stack[i + 1]];		// sum+=栈中景点两两之间路径长度
 		}
 		sum += roads[stack[i]][end];					// 注意终点没有入栈,加上最后一个景点到end路径长度
