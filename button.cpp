@@ -23,6 +23,23 @@ void Button::show() const
 	//用于在指定区域内以指定格式输出字符串
 }
 
+void Button::show_click() const
+{
+	// 设置样式
+	setlinestyle(PS_SOLID, 2);
+	setfillcolor(RGB(111, 241, 216));
+	settextstyle(25, 0, "华文琥珀");
+
+	// 绘制按钮
+	fillrectangle(x, y, x + width, y + height);
+
+	// 绘制文本
+	RECT rect = { x, y, x + width, y + height };
+	settextcolor(BLACK);
+	drawtext(text.c_str(), &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
+	//用于在指定区域内以指定格式输出字符串
+}
+
 bool Button::state(const ExMessage& msg) const
 {
 	if (msg.message == WM_MOUSEMOVE && isIn(msg))				// 按钮悬浮
@@ -44,7 +61,7 @@ bool Button::state(const ExMessage& msg) const
 	{
 		// 设置样式
 		setlinestyle(PS_SOLID, 2);
-		setfillcolor(CYAN);
+		setfillcolor(RGB(111, 241, 216));
 		settextstyle(25, 0, "华文琥珀");
 
 		// 绘制按钮

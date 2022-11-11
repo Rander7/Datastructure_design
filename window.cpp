@@ -149,6 +149,7 @@ int Window::searchJudgeButton(int& s, int& f)
 		{
 			for (int i = 0; i < G.m_vertex_number; i++)
 			{
+				button[s]->show_click();
 				if (button[i]->state(msg) && msg.message != WM_LBUTTONUP)
 				{
 					f = i;
