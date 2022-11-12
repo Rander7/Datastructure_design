@@ -2,21 +2,21 @@
 #include<graphics.h>
 #include<conio.h>
 
-UNDIRECTED_GRAPH G;										// 先实例化无向图类
+UNDIRECTED_GRAPH G;						// 先实例化无向图类
 
 Window::Window(const int& width, const int& height) : Widget(0, 0, width, height)
 {
-	G.init_UNDIRECTED_GRAPH();							// 创建以学校景点和道路构建的邻接矩阵
+	G.init_UNDIRECTED_GRAPH();			// 创建以学校景点和道路构建的邻接矩阵
 	show();
 
 	// 设置绘图样式
-	LOGFONT f;											// 字体的属性
-	gettextstyle(&f);									// 获取当前文字样式 LOGFONT 结构体的指针。
-	f.lfQuality = ANTIALIASED_QUALITY;					// 指定文字的输出质量
-	settextstyle(&f);									// 设置当前文字样式
-	settextcolor(BLACK);								// 字体颜色
-	setbkmode(TRANSPARENT);								// 设置当前设备图案填充和文字输出时的背景模式 透明
-	setlinecolor(BLACK);								// 设置当前设备画线颜色
+	LOGFONT f;							// 字体的属性
+	gettextstyle(&f);					// 获取当前文字样式 LOGFONT 结构体的指针。
+	f.lfQuality = ANTIALIASED_QUALITY;	// 指定文字的输出质量
+	settextstyle(&f);					// 设置当前文字样式
+	settextcolor(BLACK);				// 字体颜色
+	setbkmode(TRANSPARENT);				// 设置当前设备图案填充和文字输出时的背景模式 透明
+	setlinecolor(BLACK);				// 设置当前设备画线颜色
 
 	// 创建主窗口按钮
 	mainWindow_view = new Button(250, 200, 150, 40, "查看地图");
@@ -61,7 +61,7 @@ Window::Window(const int& width, const int& height) : Widget(0, 0, width, height
 	button[12] = new Button(680, 487, 95, 42, "排球场");
 	button[13] = new Button(470, 660, 75, 42, "大门");
 
-	showMainWindow();									// 显示主界面
+	showMainWindow();				// 显示主界面
 }
 
 void Window::update_Button(Button* button, char s[])
@@ -75,7 +75,7 @@ int Window::viewJudgeButton()
 	while (1)
 	{
 		msg = getmessage();
-		for (int i = 0; i < G.m_vertex_number; i++)
+		for (int i = 0; i < G.get_vertex_number(); i++)
 		{
 			if (button[i]->state(msg))
 			{
@@ -101,7 +101,7 @@ int Window::viewJudgeButton_edit()
 	while (1)
 	{
 		msg = getmessage();
-		for (int i = 0; i < G.m_vertex_number; i++)
+		for (int i = 0; i < G.get_vertex_number(); i++)
 		{
 			if (button[i]->state(msg))
 			{
@@ -134,7 +134,7 @@ int Window::searchJudgeButton(int& s, int& f)
 	{
 		msg = getmessage();
 		if (flag == 1) {
-			for (int i = 0; i < G.m_vertex_number; i++)
+			for (int i = 0; i < G.get_vertex_number(); i++)
 			{
 				if (button[i]->state(msg) && msg.message != WM_LBUTTONUP)
 				{
@@ -166,7 +166,7 @@ int Window::searchJudgeButton(int& s, int& f)
 		}
 		else if (flag == 2)
 		{
-			for (int i = 0; i < G.m_vertex_number; i++)
+			for (int i = 0; i < G.get_vertex_number(); i++)
 			{
 				if (button[i]->state(msg) && msg.message != WM_LBUTTONUP)
 				{
@@ -215,7 +215,7 @@ int Window::editJudgeButton(int& s, int& f)
 	{
 		msg = getmessage();
 		if (flag == 1) {
-			for (int i = 0; i < G.m_vertex_number; i++)
+			for (int i = 0; i < G.get_vertex_number(); i++)
 			{
 				if (button[i]->state(msg) && msg.message != WM_LBUTTONUP)
 				{
@@ -242,7 +242,7 @@ int Window::editJudgeButton(int& s, int& f)
 		}
 		else if (flag == 2)
 		{
-			for (int i = 0; i < G.m_vertex_number; i++)
+			for (int i = 0; i < G.get_vertex_number(); i++)
 			{
 				if (button[i]->state(msg) && msg.message != WM_LBUTTONUP)
 				{
@@ -328,7 +328,7 @@ void Window::showLine(int x1, int y1, int x2, int y2,int color)
 void Window::show() const
 {
 	// 新建窗口
-	SetWindowText(initgraph(width, height, NULL), "校园导游系统");	//设置窗口标题
+	SetWindowText(initgraph(width, height, NULL), "校园导游系统");//设置窗口标题
 	setbkcolor(WHITE);
 	cleardevice();
 }
@@ -341,38 +341,36 @@ void Window::messageLoop()
 	{
 		// 获取并判断消息
 		msg = getmessage();//用于获取一个消息。如果当前消息队列中没有，就一直等待
-
-		// 判断显示界面
-		if (state == WindowState::mainWindow)									// 主窗口显示
+		switch (state)
 		{
-			if (mainWindow_view->state(msg))									// 查看地图
+		case Window::mainWindow:
+			if (mainWindow_view->state(msg))		// 查看地图
 			{
 				showMap();
 			}
-			else if (mainWindow_edit->state(msg))								// 编辑景点
+			else if (mainWindow_edit->state(msg))	// 编辑景点
 			{
 				showEditMap();
 			}
-			else if (mainWindow_search->state(msg))								// 查询路径
+			else if (mainWindow_search->state(msg))	// 查询路径
 			{
 				showSearch();
 			}
 			else if (mainWindow_exit->state(msg) && msg.message != WM_LBUTTONUP)// 退出程序
 			{
-				return;															// 直接return返回主函数
+				return;								// 直接return返回主函数
 			}
-		}
-		else if (state == WindowState::map)										// 查看地图
-		{
+			break;
+		case Window::map:
 			if (viewMap_message->state(msg))
 			{
-				showMessage();													//展示提示信息
+				showMessage();						//展示提示信息
 			}
-			else if (viewMap_back->state(msg))									// 返回主窗口
+			else if (viewMap_back->state(msg))		// 返回主窗口
 			{
 				showMainWindow();
 			}
-			else 
+			else
 			{
 				int n = viewJudgeButton();
 				if (n >= 0)
@@ -380,9 +378,8 @@ void Window::messageLoop()
 					MessageBox(GetHWnd(), G.vertexs[n].get_vex_information(), "景点信息", MB_OK);
 				}
 			}
-		}
-		else if (state == WindowState::Search)
-		{
+			break;
+		case Window::Search:
 			if (search_back->state(msg))
 			{
 				showMainWindow();
@@ -409,12 +406,12 @@ void Window::messageLoop()
 			else if (search_search_path->state(msg))
 			{
 				int start, finish;
-				if(searchJudgeButton(start, finish))
+				if (searchJudgeButton(start, finish))
 				{
 					G.search_all_the_short_path(path_array, short_path_array, start, finish);
-					int cnt=0;													//计算每一个最短路径景点数
-					int c = 0;													//控制显示路线的颜色
-					for (int i = 0; pass_by[i]!= -1; i+=(cnt+1))
+					int cnt = 0;				//计算每一个最短路径景点数
+					int c = 0;					//控制显示路线的颜色
+					for (int i = 0; pass_by[i] != -1; i += (cnt + 1))
 					{
 						cnt = 0;
 						for (int j = i; pass_by[j] != -1; j++)
@@ -427,7 +424,7 @@ void Window::messageLoop()
 						}
 						c++;
 					}
-					if (cnt != 0)												// 展示线路并暂停、刷新
+					if (cnt != 0)				// 展示线路并暂停、刷新
 					{
 						ExMessage msg;
 						while (1)
@@ -441,10 +438,9 @@ void Window::messageLoop()
 						}
 					}
 				}
-			}		
-		}
-		else if (state == WindowState::editMap)
-		{
+			}
+			break;
+		case Window::editMap:
 			if (editMap_back->state(msg))
 			{
 				showMainWindow();
@@ -478,13 +474,13 @@ void Window::messageLoop()
 					char s2[50];
 					int flag1 = 0;
 					int flag2 = 0;
-					int id1=MessageBox(GetHWnd(), "要更新景点名吗", "操作提示", MB_YESNO);
+					int id1 = MessageBox(GetHWnd(), "要更新景点名吗", "操作提示", MB_YESNO);
 					if (IDYES == id1)
 					{
 						InputBox(s1, 50, "请输入新景点名");
-						update_Button(button[n], s1);								//更新显示的按钮名字
-						Window::showEditMap();										//刷新更新后的按钮
-						flag1= 1;
+						update_Button(button[n], s1);		//更新显示的按钮名字
+						Window::showEditMap();				//刷新更新后的按钮
+						flag1 = 1;
 					}
 					int id2 = MessageBox(GetHWnd(), "要更新景点信息吗", "操作提示", MB_YESNO);
 					if (IDYES == id2)
@@ -495,7 +491,7 @@ void Window::messageLoop()
 					if (flag1 || flag2)
 					{
 						MessageBox(GetHWnd(), "该景点相关信息已更新", "操作提示", MB_OK);
-						G.update_vertex(n, s1, s2,flag1+flag2);
+						G.update_vertex(n, s1, s2, flag1 + flag2);
 					}
 					showEditMap();
 				}
@@ -519,7 +515,7 @@ void Window::messageLoop()
 					ExMessage m = getmessage(EX_MOUSE);
 					if (m.message == WM_LBUTTONDOWN)
 					{
-						button[G.m_vertex_number - 1] = new Button(m.x - length * 5 - 20, m.y - 20, length * 10 + 35, 40, s1);
+						button[G.get_vertex_number() - 1] = new Button(m.x - length * 5 - 20, m.y - 20, length * 10 + 35, 40, s1);
 						showEditMap();
 						MessageBox(GetHWnd(), "该景点已增加", "操作完成", MB_OK);
 						break;
@@ -530,17 +526,16 @@ void Window::messageLoop()
 				{
 					MessageBox(GetHWnd(), "请在图中选择新添路径上的和新景点相连的景点", "操作提示", MB_OK);
 					int start, finish;
-					start = G.m_vertex_number;
+					start = G.get_vertex_number()-1;		//景点数已经增加了要减一
 					finish = viewJudgeButton_edit();
 					if (finish >= 0)
 					{
 						char s[10];
-						int weight = MAXDISTANCE;
-						//这里一定要MAXDISTENCE,因为前面用add判断已经修改了weight
-						if (G.add_road(start, finish, weight))
+						int weight=0;
+						if (!G.judge_path_exist(start,finish))
 						{
 							InputBox(s, 10, "请输入道路长度");
-							int weight = atoi(s);										//char*转int
+							weight = atoi(s);				//char*转int
 							G.add_road(start, finish, weight);
 							MessageBox(GetHWnd(), "该道路已增加", "操作完成", MB_OK);
 							showEditMap();
@@ -551,7 +546,7 @@ void Window::messageLoop()
 							if (IDYES == id)
 							{
 								InputBox(s, 10, "请输入道路长度");
-								int weight = atoi(s);									//char*转int
+								int weight = atoi(s);		//char*转int
 								G.update_road(start, finish, weight);
 								MessageBox(GetHWnd(), "该道路已更新", "操作完成", MB_OK);
 								showEditMap();
@@ -591,28 +586,26 @@ void Window::messageLoop()
 				if (editJudgeButton(start, finish))
 				{
 					char s[10];
-					int weight = 0;
-					//这里weight不能是MAXDISTENCE，因为是更新权值是MAXDISTENCE后面就不更新了
-					if (G.update_road(start, finish, weight))
+					if (G.judge_path_exist(start,finish))
 					{
 						InputBox(s, 10, "请输入道路长度");
-						int weight = atoi(s);										//char*转int
+						int weight = atoi(s);				//char*转int
 						G.update_road(start, finish, weight);
 						MessageBox(GetHWnd(), "该道路已更新", "操作完成", MB_OK);
 						showEditMap();
 					}
 					else
 					{
-						int id=MessageBox(GetHWnd(), "该道路不存在，是否增加道路?", "操作", MB_YESNO);
+						int id = MessageBox(GetHWnd(), "该道路不存在，是否增加道路?", "操作", MB_YESNO);
 						if (IDYES == id)
 						{
 							InputBox(s, 10, "请输入道路长度");
-							int weight = atoi(s);									//char*转int
+							int weight = atoi(s);			//char*转int
 							G.add_road(start, finish, weight);
 							MessageBox(GetHWnd(), "该道路已增加", "操作完成", MB_OK);
 							showEditMap();
 						}
-						else if(IDNO==id)
+						else if (IDNO == id)
 						{
 							showEditMap();
 						}
@@ -626,28 +619,28 @@ void Window::messageLoop()
 				if (editJudgeButton(start, finish))
 				{
 					char s[10];
-					int weight = MAXDISTANCE;										
+					int weight = MAXDISTANCE;
 					//这里一定要MAXDISTENCE,因为前面用add判断已经修改了weight
-					if (G.add_road(start, finish, weight))
+					if (!G.judge_path_exist(start, finish))
 					{
 						InputBox(s, 10, "请输入道路长度");
-						int weight = atoi(s);										//char*转int
+						int weight = atoi(s);				//char*转int
 						G.add_road(start, finish, weight);
 						MessageBox(GetHWnd(), "该道路已增加", "操作完成", MB_OK);
 						showEditMap();
 					}
 					else
 					{
-						int id=MessageBox(GetHWnd(), "该道路已经存在，是否要更新该道路的权值?", "操作提示", MB_YESNO);
+						int id = MessageBox(GetHWnd(), "该道路已经存在，是否要更新该道路的权值?", "操作提示", MB_YESNO);
 						if (IDYES == id)
 						{
 							InputBox(s, 10, "请输入道路长度");
-							int weight = atoi(s);									//char*转int
+							int weight = atoi(s);			//char*转int
 							G.update_road(start, finish, weight);
 							MessageBox(GetHWnd(), "该道路已更新", "操作完成", MB_OK);
 							showEditMap();
 						}
-						else if(IDNO==id)
+						else if (IDNO == id)
 						{
 							showEditMap();
 						}
@@ -660,8 +653,9 @@ void Window::messageLoop()
 				int start, finish;
 				if (editJudgeButton(start, finish))
 				{
-					if (G.del_road(start, finish))
+					if (G.judge_path_exist(start, finish))
 					{
+						G.del_road(start, finish);
 						MessageBox(GetHWnd(), "该道路已删除", "操作完成", MB_OK);
 						showEditMap();
 					}
@@ -672,6 +666,9 @@ void Window::messageLoop()
 					}
 				}
 			}
+			break;
+		default:
+			break;
 		}
 	}
 }
@@ -720,7 +717,7 @@ void Window::showMap()
 	{
 		button[i]->show();
 	}
-	static int n = 1;							//保证提示信息只输出一次
+	static int n = 1;		//保证提示信息只输出一次
 	while (n)
 	{
 		showMessage();
@@ -745,7 +742,7 @@ void Window::showSearch()
 	{
 		button[i]->show();
 	}
-	static int n = 1;							//保证提示信息只输出一次
+	static int n = 1;		//保证提示信息只输出一次
 	while (n)
 	{
 		searchMessage();
@@ -775,7 +772,7 @@ void Window::showEditMap()
 	{
 		button[i]->show();
 	}
-	static int n = 1;							//保证提示信息只输出一次
+	static int n = 1;		//保证提示信息只输出一次
 	while (n)
 	{
 		editMessage();

@@ -40,7 +40,7 @@ void Button::show_click() const
 
 bool Button::state(const ExMessage& msg) const
 {
-	if (msg.message == WM_MOUSEMOVE && isIn(msg))				// 按钮悬浮
+	if (msg.message == WM_MOUSEMOVE && isIn(msg))			// 按钮悬浮
 	{
 		// 设置样式
 		setlinestyle(PS_SOLID, 2);
@@ -55,7 +55,7 @@ bool Button::state(const ExMessage& msg) const
 		drawtext(text.c_str(), &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 		return false;
 	}
-	else if ((msg.message == WM_LBUTTONDOWN) && isIn(msg))		// 按钮被点击
+	else if ((msg.message == WM_LBUTTONDOWN) && isIn(msg))	// 按钮被点击
 	{
 		// 设置样式
 		setlinestyle(PS_SOLID, 2);
@@ -70,7 +70,7 @@ bool Button::state(const ExMessage& msg) const
 		drawtext(text.c_str(), &rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE);
 		return true;
 	}
-	else														// 恢复按钮原来的状态
+	else										// 恢复按钮原来的状态
 	{
 		if (this->whe_click)
 		{
