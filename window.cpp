@@ -409,8 +409,8 @@ void Window::messageLoop()
 				if (searchJudgeButton(start, finish))
 				{
 					G.search_all_the_short_path(path_array, short_path_array, start, finish);
-					int cnt = 0;				//计算每一个最短路径景点数
-					int c = 0;					//控制显示路线的颜色
+					int cnt = 0;		//计算每一个最短路径景点数
+					int c = 0;			//控制显示路线的颜色
 					for (int i = 0; pass_by[i] != -1; i += (cnt + 1))
 					{
 						cnt = 0;
@@ -424,7 +424,7 @@ void Window::messageLoop()
 						}
 						c++;
 					}
-					if (cnt != 0)				// 展示线路并暂停、刷新
+					if (cnt != 0)		// 展示线路并暂停、刷新
 					{
 						ExMessage msg;
 						while (1)
@@ -478,8 +478,8 @@ void Window::messageLoop()
 					if (IDYES == id1)
 					{
 						InputBox(s1, 50, "请输入新景点名");
-						update_Button(button[n], s1);		//更新显示的按钮名字
-						Window::showEditMap();				//刷新更新后的按钮
+						update_Button(button[n], s1);//更新显示的按钮名字
+						Window::showEditMap();		 //刷新更新后的按钮
 						flag1 = 1;
 					}
 					int id2 = MessageBox(GetHWnd(), "要更新景点信息吗", "操作提示", MB_YESNO);
@@ -526,7 +526,7 @@ void Window::messageLoop()
 				{
 					MessageBox(GetHWnd(), "请在图中选择新添路径上的和新景点相连的景点", "操作提示", MB_OK);
 					int start, finish;
-					start = G.get_vertex_number()-1;		//景点数已经增加了要减一
+					start = G.get_vertex_number()-1;	//景点数已经增加了要减一
 					finish = viewJudgeButton_edit();
 					if (finish >= 0)
 					{
@@ -535,7 +535,7 @@ void Window::messageLoop()
 						if (!G.judge_path_exist(start,finish))
 						{
 							InputBox(s, 10, "请输入道路长度");
-							weight = atoi(s);				//char*转int
+							weight = atoi(s);			//char*转int
 							G.add_road(start, finish, weight);
 							MessageBox(GetHWnd(), "该道路已增加", "操作完成", MB_OK);
 							showEditMap();

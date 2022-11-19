@@ -11,20 +11,20 @@ public:
 	friend class UNDIRECTED_GRAPH;
 	Window(const int& width = 600, const int& height = 400);
 
-	void show() const;										// 显示窗口
-	void messageLoop();										// 消息循环
-	void close();											// 关闭窗口
+	void show() const;				// 显示窗口
+	void messageLoop();				// 消息循环
+	void close();					// 关闭窗口
 
-	void showMainWindow();									// 显示主窗口
+	void showMainWindow();			// 显示主窗口
 
-	void showMessage();										// 地图界面提示信息展示
-	void searchMessage();									// 搜索界面提示信息展示
-	void search_pathMessage();								//搜索界面搜索最短路径信息展示
-	void editMessage();										// 编辑界面提示信息展示
+	void showMessage();				// 地图界面提示信息展示
+	void searchMessage();			// 搜索界面提示信息展示
+	void search_pathMessage();		// 搜索界面搜索最短路径信息展示
+	void editMessage();				// 编辑界面提示信息展示
 
-	void showMap();											// 显示地图窗口   
-	void showSearch();										// 显示搜索窗口
-	void showEditMap();										// 显示编辑窗口
+	void showMap();					// 显示地图窗口   
+	void showSearch();				// 显示搜索窗口
+	void showEditMap();				// 显示编辑窗口
 
 	int viewJudgeButton();
 	int viewJudgeButton_edit();
